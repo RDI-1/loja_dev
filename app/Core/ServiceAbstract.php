@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Core;
 
 class ServiceAbstract
 {
-    
+
 }
