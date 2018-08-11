@@ -8,6 +8,7 @@ class Clientes extends ModelAbstract
 {
 
     protected $table = 'adm_clientes';
+    protected $primaryKey = 'pk_id_adm_cliente';
     protected $fillable = ['fk_id_adm_pessoa_usuario'];
 
     public function usuario()

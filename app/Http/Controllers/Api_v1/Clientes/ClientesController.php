@@ -21,7 +21,48 @@ class ClientesController extends ControllerAbstract
 
     public function index()
     {
-        return response()->json($this->_facadeCliente->getAll());
+        
+        $clientes = $this->_facadeCliente->getAll();
+
+        if($clientes->isEmpty()) {
+            return response()->json([
+                'message'   => 'Nenhum cliente encontrado',
+            ], 404);
+        }
+
+        return response()->json($clientes);
     }
+
+    public function show($id)
+    {
+        $cliente = $this->_facadeCliente->findById($id);
+
+        if(!$cliente) {
+            return response()->json([
+                'message'   => 'Nenhum cliente encontrado',
+            ], 404);
+        }
+
+        return response()->json($cliente);
+    }
+
+    public function store(Request $request)
+    {
+        return response()->json($this->_facadeCliente->save($request), 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $cliente = $this->_facadeCliente->update($request, $id);
+
+
+    }
+
+
+
+
+
+
 
 }
