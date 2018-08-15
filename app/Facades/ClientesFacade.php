@@ -25,19 +25,21 @@ class ClientesFacade extends FacadeAbstract
         return $this->_model::with('usuario')->get();
     }
 
-    public function findById($id)
+    public function findById(int $id)
     {
         return $this->_model::with('usuario')->get()->find($id);
     }
 
-    public function save($request)
+    public function save(Object $request)
     {
+        if (isset($request->pk_id_adm_cliente) && $request->pk_id_adm_cliente != null) {
 
-        // lembrar de 
-        //se o usuário estiver vazio, carrega o usuário atual para ser atualizado
+            return $this->update($request);
+
+        }
+
         $usuario = $this->_facadeUsuario->save($request);
-
-        $this->_model->fill(['fk_id_adm_pessoa_usuario' => $usuario->pk_id_adm_pessoa_usuario]);
+        $this->_model->fk_id_adm_pessoa_usuario = $usuario->pk_id_adm_pessoa_usuario;
         $this->_model->save();
 
         return [
@@ -47,23 +49,25 @@ class ClientesFacade extends FacadeAbstract
 
     }
 
-    public function update(Request $request, $id)
+    public function update(Object $request)
     {
 
-        $cliente = $this->findById($id);
+        $this->_model = $this->findById($request->pk_id_adm_cliente);
 
-        if ($cliente) {
-            
-            $cliente->fill($request->all());
-            $this->save($cliente);
-
+        if (empty($this->_model->pk_id_adm_cliente)) {
+            return ['error' => 'Nenhum cliente encontrado'];
         }
 
+        $this->_model->fill($request->all());
+        $request->pk_id_adm_pessoa_usuario = $this->_model->fk_id_adm_pessoa_usuario;
+        $usuario = $this->_facadeUsuario->save($request);
 
-        return response()->json($job);
+        return [
+            'cliente' => $this->_model,
+            'usuario' => $usuario,
+        ];
 
     }
-
 
 
 }
