@@ -11,12 +11,12 @@ use App\Facades\ClientesFacade;
 class ClientesController extends ControllerAbstract
 {
 
-    private $_facadeCliente;
+    protected $_facadeCliente;
 
-    public function __construct()
+    public function __construct(ClientesFacade $facadeCliente)
     {
 
-        $this->_facadeCliente = new ClientesFacade();
+        $this->_facadeCliente = $facadeCliente;
 
     }
     
@@ -27,8 +27,12 @@ class ClientesController extends ControllerAbstract
         $clientes = $this->_facadeCliente->getAll();
 
         if ($clientes->isEmpty()) {
+            
             return response()->json([
-                'message' => 'Nenhum cliente encontrado',
+                'informacoes' => [
+                    'Nenhum cliente encontrado',
+                ],
+
             ], 404);
         }
 
@@ -42,7 +46,9 @@ class ClientesController extends ControllerAbstract
 
         if (!$cliente) {
             return response()->json([
-                'message' => 'Nenhum cliente encontrado',
+                'informacoes' => [
+                    'Nenhum cliente encontrado',
+                ],
             ], 404);
         }
 
@@ -55,9 +61,9 @@ class ClientesController extends ControllerAbstract
 
         $cliente = $this->_facadeCliente->save($request);
 
-        if (isset($cliente['error'])) {
+        if (isset($cliente['errors'])) {
             return response()->json([
-                'message' => $cliente['error'],
+                'errors' => $cliente['errors'],
             ], 404);
         }
 
@@ -71,9 +77,9 @@ class ClientesController extends ControllerAbstract
         $request->pk_id_adm_cliente = $id;
         $cliente = $this->_facadeCliente->save($request);
 
-        if (isset($cliente['error'])) {
+        if (isset($cliente['errors'])) {
             return response()->json([
-                'message' => $cliente['error'],
+                'errors' => $cliente['errors']
             ], 404);
         }
 
