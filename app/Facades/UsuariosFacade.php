@@ -51,7 +51,7 @@ class UsuariosFacade extends FacadeAbstract
 
     }
 
-    protected function update(Object $request)
+    private function update(Object $request)
     {
 
         try {
@@ -68,7 +68,7 @@ class UsuariosFacade extends FacadeAbstract
             $this->_model->fill($request->all());
             $this->_model->save();
             DB::commit();
-            
+
             return $this->_model;
 
         } catch (Exception $e) {
@@ -90,6 +90,7 @@ class UsuariosFacade extends FacadeAbstract
     {
         return $this->_model::find($id);
     }
+
 
 
 }

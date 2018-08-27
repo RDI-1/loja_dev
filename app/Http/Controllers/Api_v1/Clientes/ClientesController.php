@@ -19,15 +19,15 @@ class ClientesController extends ControllerAbstract
         $this->_facadeCliente = $facadeCliente;
 
     }
-    
+
 
     public function index()
     {
 
         $clientes = $this->_facadeCliente->getAll();
 
-        if ($clientes->isEmpty()) {
-            
+        if ((!$clientes) || $clientes->isEmpty()) {
+
             return response()->json([
                 'informacoes' => [
                     'Nenhum cliente encontrado',

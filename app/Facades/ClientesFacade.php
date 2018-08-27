@@ -23,9 +23,29 @@ class ClientesFacade extends FacadeAbstract
 
     public function save(Object $request)
     {
-        
+
+        $messages = [
+
+            'errors' => [],
+        ];
+
+        if ($this->getAll(['cpf' => $request->cpf])->toArray()) {
+
+            $messages['errors'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este CPF';
+        }
+
+        if ($this->getAll(['email' => $request->email])->toArray()) {
+
+            $messages['errors'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este Email';
+        }
+
+        if ($messages['errors']) {
+            return $messages;
+        }
+
+
         try {
-            
+
             if ($request->pk_id_adm_cliente) {
                 return $this->update($request);
             }
@@ -50,20 +70,16 @@ class ClientesFacade extends FacadeAbstract
 
             DB::rollBack();
 
-            return [
 
-                'errors' => [
-                    'error_message' => 'Não foi possível realizar o cadastro do cliente',
-                    'system_message' => $e->getMessage(),
-                ],
+            $messages['errors']['error_message'] = 'Não foi possível realizar o cadastro do cliente';
+            $messages['errors']['system_message'] = $e->getMessage();
 
-            ];
-
+            return $messages;
         }
 
     }
 
-    protected function update(Object $request)
+    private function update(Object $request)
     {
 
         try {
@@ -82,16 +98,13 @@ class ClientesFacade extends FacadeAbstract
             DB::beginTransaction();
 
             $this->_model->fill($request->all());
-            $request->pk_id_adm_pessoa_usuario = $this->_model->fk_id_adm_pessoa_usuario;
-            $usuario = $this->_facadeUsuario->save($request);
             unset($this->_model->usuario);
+            $request->pk_id_adm_pessoa_usuario = $this->_model->fk_id_adm_pessoa_usuario;
+            $this->_model->usuario = $this->_facadeUsuario->save($request);
 
             DB::commit();
 
-            return [
-                'cliente' => $this->_model,
-                'usuario' => $usuario,
-            ];
+            return $this->_model;
 
         } catch (Exception $e) {
 
@@ -110,10 +123,20 @@ class ClientesFacade extends FacadeAbstract
 
     }
 
-    public function getAll()
+    public function getAll(array $params = [])
     {
-        $usuarios = $this->_model::with('usuario')->get();
-    
+        $select = $this->_model::with('usuario')
+            ->join('adm_pessoas_usuarios as u', 'u.pk_id_adm_pessoa_usuario', '=', 'adm_clientes.fk_id_adm_pessoa_usuario');
+
+        if (isset($params['cpf']) && $params['cpf']) {
+            $select->where('u.cpf', $params['cpf']);
+        }
+
+        if (isset($params['email']) && $params['email']) {
+            $select->where('u.email', $params['email']);
+        }
+
+        return $select->get();
     }
 
     public function findById(int $id)
