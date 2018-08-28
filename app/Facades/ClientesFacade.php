@@ -4,7 +4,6 @@ namespace App\Facades;
 
 use App\Core\FacadeAbstract;
 use App\Models\Clientes;
-use App\Models\Usuarios;
 use App\Facades\UsuariosFacade;
 use Exception;
 use DB;
@@ -12,43 +11,44 @@ use DB;
 class ClientesFacade extends FacadeAbstract
 {
 
-    protected $_model;
-    protected $_facadeUsuario;
+    private $_model;
+    private $_facadeUsuario;
+    private $_response;
 
     public function __construct(Clientes $cliente, UsuariosFacade $facadeUsuario)
     {
         $this->_model = $cliente;
         $this->_facadeUsuario = $facadeUsuario;
+        $this->_response = [
+
+            'errors' => [
+                'error_messages' => [],
+                'system_messages' => [],
+            ],
+
+        ];
     }
 
     public function save(Object $request)
     {
 
-        $messages = [
-
-            'errors' => [],
-        ];
+        if ($request->pk_id_adm_cliente) {
+            return $this->update($request);
+        }
 
         if ($this->getAll(['cpf' => $request->cpf])->toArray()) {
-
-            $messages['errors'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este CPF';
+            $this->_response['errors']['error_messages'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este CPF';
         }
 
         if ($this->getAll(['email' => $request->email])->toArray()) {
-
-            $messages['errors'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este Email';
+            $this->_response['errors']['error_messages'][] = 'Não foi cadastrar este cliente, pois já existe um cliente com este Email';
         }
 
-        if ($messages['errors']) {
-            return $messages;
+        if ($this->_response['errors']['error_messages']) {
+            return $this->_response;
         }
-
 
         try {
-
-            if ($request->pk_id_adm_cliente) {
-                return $this->update($request);
-            }
 
             DB::beginTransaction();
 
@@ -70,9 +70,8 @@ class ClientesFacade extends FacadeAbstract
 
             DB::rollBack();
 
-
-            $messages['errors']['error_message'] = 'Não foi possível realizar o cadastro do cliente';
-            $messages['errors']['system_message'] = $e->getMessage();
+            $this->_response['errors']['error_messages'][] = 'Não foi possível realizar o cadastro do cliente';
+            $this->_response['errors']['system_messages'][] = $e->getMessage();
 
             return $messages;
         }
@@ -84,14 +83,12 @@ class ClientesFacade extends FacadeAbstract
 
         try {
 
-
             $this->_model = $this->findById($request->pk_id_adm_cliente);
 
             if (empty($this->_model->pk_id_adm_cliente)) {
 
-                return ['errors' => [
-                    'Nenhum cliente encontrado para a atualização',
-                ]];
+                $this->_response['errors']['error_messages'][] = 'Nenhum cliente encontrado para a atualização';
+                return $this->_response;
 
             }
 
@@ -110,14 +107,10 @@ class ClientesFacade extends FacadeAbstract
 
             DB::rollBack();
 
-            return [
+            $this->_response['errors']['error_messages'][] = 'Não foi possível realizar o cadastro do cliente';
+            $this->_response['errors']['system_messages'][] = $e->getMessage();
 
-                'errors' => [
-                    'error_message' => 'Não foi possível realizar o cadastro do cliente',
-                    'system_message' => $e->getMessage(),
-                ],
-
-            ];
+            return $this->_response;
 
         }
 

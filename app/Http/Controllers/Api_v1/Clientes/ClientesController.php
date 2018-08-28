@@ -15,9 +15,7 @@ class ClientesController extends ControllerAbstract
 
     public function __construct(ClientesFacade $facadeCliente)
     {
-
         $this->_facadeCliente = $facadeCliente;
-
     }
 
 
@@ -26,14 +24,14 @@ class ClientesController extends ControllerAbstract
 
         $clientes = $this->_facadeCliente->getAll();
 
-        if ((!$clientes) || $clientes->isEmpty()) {
+        if (!$clientes) {
 
             return response()->json([
                 'informacoes' => [
                     'Nenhum cliente encontrado',
                 ],
 
-            ], 404);
+            ], 204);
         }
 
         return response()->json($clientes);
@@ -49,7 +47,7 @@ class ClientesController extends ControllerAbstract
                 'informacoes' => [
                     'Nenhum cliente encontrado',
                 ],
-            ], 404);
+            ], 204);
         }
 
         return response()->json($cliente);
@@ -64,7 +62,7 @@ class ClientesController extends ControllerAbstract
         if (isset($cliente['errors'])) {
             return response()->json([
                 'errors' => $cliente['errors'],
-            ], 404);
+            ], 422);
         }
 
         return response()->json($cliente, 201);
@@ -73,23 +71,17 @@ class ClientesController extends ControllerAbstract
 
     public function update(Request $request, $id)
     {
-
         $request->pk_id_adm_cliente = $id;
         $cliente = $this->_facadeCliente->save($request);
 
         if (isset($cliente['errors'])) {
             return response()->json([
                 'errors' => $cliente['errors']
-            ], 404);
+            ], 422);
         }
 
         return response()->json($cliente, 200);
     }
-
-
-
-
-
 
 
 }

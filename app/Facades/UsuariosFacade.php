@@ -10,21 +10,30 @@ use DB;
 class UsuariosFacade extends FacadeAbstract
 {
 
-    protected $_model;
+    private $_model;
+    private $_response;
 
     public function __construct(Usuarios $usuario)
     {
         $this->_model = $usuario;
+        $this->_response = [
+
+            'errors' => [
+                'error_messages' => [],
+                'system_messages' => [],
+            ],
+
+        ];
     }
 
     public function save(Object $request)
     {
 
-        try {
+        if (isset($request->pk_id_adm_pessoa_usuario)) {
+            return $this->update($request);
+        }
 
-            if (isset($request->pk_id_adm_pessoa_usuario)) {
-                return $this->update($request);
-            }
+        try {
 
             DB::beginTransaction();
 
@@ -38,14 +47,10 @@ class UsuariosFacade extends FacadeAbstract
 
             DB::rollBack();
 
-            return [
+            $this->_response['errors']['error_messages'][] = 'Não foi possível realizar o cadastro do usuário';
+            $this->_response['errors']['system_messages'][] = $e->getMessage();
 
-                'errors' => [
-                    'error_message' => 'Não foi possível realizar o cadastro do usuário',
-                    'system_message' => $e->getMessage(),
-                ],
-
-            ];
+            return $this->_response;
 
         }
 
@@ -59,9 +64,10 @@ class UsuariosFacade extends FacadeAbstract
             $this->_model = $this->findById($request->pk_id_adm_pessoa_usuario);
 
             if (empty($this->_model->pk_id_adm_pessoa_usuario)) {
-                return ['errors' => [
-                    'Nenhum usuário encontrado',
-                ]];
+
+                $this->_response['errors']['error_messages'][] = 'Nenhum usuário encontrado';
+                return $this->_response;
+
             }
 
             DB::beginTransaction();
@@ -75,12 +81,10 @@ class UsuariosFacade extends FacadeAbstract
 
             DB::rollBack();
 
-            return [
-                'errors' => [
-                    'error_message' => 'Não foi possível atualizar o registro do usuário',
-                    'system_message' => $e->getMessage(),
-                ],
-            ];
+            $this->_response['errors']['error_messages'][] = 'Não foi possível realizar o cadastro do usuário';
+            $this->_response['errors']['system_messages'][] = $e->getMessage();
+
+            return $this->_response;
 
         }
 
