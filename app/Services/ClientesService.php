@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Facades;
+namespace App\Services;
 
-use App\Core\FacadeAbstract;
+use App\Core\ServiceAbstract;
 use App\Models\Clientes;
-use App\Facades\UsuariosFacade;
+use App\Services\UsuariosService;
 use Exception;
 use DB;
 
-class ClientesFacade extends FacadeAbstract
+class ClientesService extends ServiceAbstract
 {
 
     private $_model;
-    private $_facadeUsuario;
+    private $_ServiceUsuario;
     private $_response;
 
-    public function __construct(Clientes $cliente, UsuariosFacade $facadeUsuario)
+    public function __construct(Clientes $cliente, UsuariosService $ServiceUsuario)
     {
         $this->_model = $cliente;
-        $this->_facadeUsuario = $facadeUsuario;
+        $this->_ServiceUsuario = $ServiceUsuario;
         $this->_response = [
 
             'errors' => [
@@ -52,7 +52,7 @@ class ClientesFacade extends FacadeAbstract
 
             DB::beginTransaction();
 
-            $usuario = $this->_facadeUsuario->save($request);
+            $usuario = $this->_ServiceUsuario->save($request);
             if (isset($usuario['errors'])) {
                 return $usuario;
             }
@@ -97,7 +97,7 @@ class ClientesFacade extends FacadeAbstract
             $this->_model->fill($request->all());
             unset($this->_model->usuario);
             $request->pk_id_adm_pessoa_usuario = $this->_model->fk_id_adm_pessoa_usuario;
-            $this->_model->usuario = $this->_facadeUsuario->save($request);
+            $this->_model->usuario = $this->_ServiceUsuario->save($request);
 
             DB::commit();
 

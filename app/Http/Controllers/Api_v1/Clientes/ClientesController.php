@@ -6,23 +6,23 @@ use App\Core\ControllerAbstract;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 
-use App\Facades\ClientesFacade;
+use App\Services\ClientesService;
 
 class ClientesController extends ControllerAbstract
 {
 
-    protected $_facadeCliente;
+    protected $_ServiceCliente;
 
-    public function __construct(ClientesFacade $facadeCliente)
+    public function __construct(ClientesService $ServiceCliente)
     {
-        $this->_facadeCliente = $facadeCliente;
+        $this->_ServiceCliente = $ServiceCliente;
     }
 
 
     public function index()
     {
 
-        $clientes = $this->_facadeCliente->getAll();
+        $clientes = $this->_ServiceCliente->getAll();
 
         if (!$clientes) {
 
@@ -40,7 +40,7 @@ class ClientesController extends ControllerAbstract
 
     public function show($id)
     {
-        $cliente = $this->_facadeCliente->findById($id);
+        $cliente = $this->_ServiceCliente->findById($id);
 
         if (!$cliente) {
             return response()->json([
@@ -57,7 +57,7 @@ class ClientesController extends ControllerAbstract
     public function store(Request $request)
     {
 
-        $cliente = $this->_facadeCliente->save($request);
+        $cliente = $this->_ServiceCliente->save($request);
 
         if (isset($cliente['errors'])) {
             return response()->json([
@@ -72,7 +72,7 @@ class ClientesController extends ControllerAbstract
     public function update(Request $request, $id)
     {
         $request->pk_id_adm_cliente = $id;
-        $cliente = $this->_facadeCliente->save($request);
+        $cliente = $this->_ServiceCliente->save($request);
 
         if (isset($cliente['errors'])) {
             return response()->json([

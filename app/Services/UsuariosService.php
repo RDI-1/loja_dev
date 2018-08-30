@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Facades;
+namespace App\Services;
 
-use App\Core\FacadeAbstract;
+use App\Core\ServiceAbstract;
 use App\Models\Usuarios;
 use Exception;
 use DB;
 
-class UsuariosFacade extends FacadeAbstract
+class UsuariosService extends ServiceAbstract
 {
 
     private $_model;
