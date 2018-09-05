@@ -3,8 +3,8 @@
 namespace App\Adapters;
 
 use App\Core\AdapterAbstract;
-use PHPMailer;
-use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class EmailAdapter extends AdapterAbstract
 {
@@ -14,7 +14,6 @@ class EmailAdapter extends AdapterAbstract
     private $_senderPasswordEmail = 'rdimfo-1';
     private $_senderName = 'RDI';
     private $_subject = '';
-    private $_receivers = [];
     private $_content = [];
     private $_errors = [
         'system_messages' => [],
@@ -23,7 +22,8 @@ class EmailAdapter extends AdapterAbstract
 
     public function __construct()
     {
-        $this->_emailDriver = new PHPMailer();
+        $this->_emailDriver = new PHPMailer(true);
+
     }
 
     public function setEmailSubject($subject)
@@ -31,25 +31,20 @@ class EmailAdapter extends AdapterAbstract
         $this->_subject = $subject;
     }
 
-    public function setEmailReceivers(array $names, array $emails)
+    public function addEmailReceiver($email, $name)
     {
-        $this->_receivers['names'] = $names;
-        $this->_receivers['emails'] = $emails;
+        $this->_emailDriver->AddAddress($email, $name);
     }
 
-    public function setEmailContent($text)
+    public function setEmailContent(array $content)
     {
-        $this->_content['text'] = $text;
+        $this->_content['text'] = $content['text'];
     }
 
     public function send()
     {
 
-        if (!$_receivers) {
-            $this->_errors['error_messages'][] = 'Não foram selecionados usuários para o envio.';
-        }
-
-        if (!$_content) {
+        if (!$this->_content) {
             $this->_errors['error_messages'][] = 'Não foi configurada nenhuma mensagem para o envio';
         }
 
@@ -57,7 +52,8 @@ class EmailAdapter extends AdapterAbstract
             return $this->_errors;
         }
 
-        $this->_emailDriver->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+        $this->_emailDriver->SMTPDebug = 2; // debugging: 1 = errors and messages, 2 = messages only
+        $this->_emailDriver-> isSMTP();
         $this->_emailDriver->SMTPAuth = true; // authentication enabled
         $this->_emailDriver->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
         $this->_emailDriver->Host = "smtp.gmail.com";
@@ -69,13 +65,9 @@ class EmailAdapter extends AdapterAbstract
         $this->_emailDriver->Body = $this->_content['text'];
         $this->_emailDriver->SetFrom($this->_senderEmail, $this->_senderName);
 
-        foreach ($this->_receivers as $receiver) {
-            $this->_emailDriver->AddAddress($receiver['email'], $reciver['email']);
-        }
-
         try {
 
-            $this->_emailDriver->Send();
+            return $this->_emailDriver->send();
 
         } catch (Exception $ex) {
 

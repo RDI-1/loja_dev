@@ -15,8 +15,9 @@ class TesteController extends ControllerAbstract
 
         $emailAdapter = new EmailAdapter();
         $emailAdapter->setEmailSubject('EMAIL DE TESTE');
-        $emailAdapter->setEmailContent('aqui é um email de teste');
-        $emailAdapter->setEmailReceivers(['Rafael Mori'],['rafaelmori123@gmail.com']);
+        $emailAdapter->setEmailContent(['text' => 'aqui é um email de teste']);
+        $emailAdapter->addEmailReceiver('rafaelmori123@gmail.com', 'Rafael');
+        vaR_dump($emailAdapter->send());
 
     }
 
