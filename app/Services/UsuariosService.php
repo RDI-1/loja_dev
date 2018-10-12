@@ -18,26 +18,25 @@ class UsuariosService extends ServiceAbstract
         $this->_model = $usuario;
     }
 
-    public function save($request)
+    public function save($request, $id = null)
     {
-        
-        if (isset($request->pk_id_adm_pessoa_usuario)) {
+
+        if ($id) {
             return $this->update($request);
         }
 
         $this->_model->fill($request->all())->save();
 
-        return $this->_model->pk_id_adm_pessoa_usuario;
-
+        return $this->_model->id;
     }
 
     private function update($request)
     {
 
-        $this->_model = $this->findById($request->pk_id_adm_pessoa_usuario);
+        $this->_model = $this->findById($request->id);
         $this->_model->fill($request->all())->save();
 
-        return $this->_model->pk_id_adm_pessoa_usuario;
+        return $this->_model->id;
 
     }
 
@@ -46,7 +45,7 @@ class UsuariosService extends ServiceAbstract
         return $this->_model::find($id);
     }
 
-   
+
 
 
 

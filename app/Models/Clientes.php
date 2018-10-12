@@ -8,12 +8,13 @@ class Clientes extends ModelAbstract
 {
 
     protected $table = 'clientes';
-    protected $primaryKey = 'pk_id_adm_cliente';
-    protected $fillable = ['pk_id_adm_cliente, fk_id_adm_pessoa_usuario'];
+    protected $primaryKey = 'id';
+    protected $fillable = ['id, usuarios_id'];
+    public $timestamps = true;
 
     public function usuario()
     {
-        return $this->hasOne('App\Models\Usuarios', 'pk_id_adm_pessoa_usuario', 'fk_id_adm_pessoa_usuario');
+        return $this->hasOne('App\Models\Usuarios', 'id', 'usuarios_id');
     }
 
 

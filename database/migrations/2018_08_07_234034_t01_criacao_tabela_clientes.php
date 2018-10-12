@@ -16,14 +16,8 @@ class T01CriacaoTabelaClientes extends Migration
         if (!Schema::hasTable('clientes')) {
             Schema::create('clientes', function (Blueprint $table) {
 
-                $table->increments('pk_id_adm_cliente');
-
-                $table->unsignedInteger('fk_id_adm_pessoa_usuario');
-
-                $table->foreign('fk_id_adm_pessoa_usuario')
-                    ->references('pk_id_adm_pessoa_usuario')
-                    ->on('usuarios');
-
+                $table->increments('id');
+                $table->integer('usuarios_id')->foreign('usuarios')->references('id')->on('usuarios');
                 $table->timestamps();
             });
         }

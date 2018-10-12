@@ -21,46 +21,20 @@ class ClientesController extends ControllerAbstract
 
     public function index()
     {
-
         $clientes = $this->_serviceCliente->getAll();
-
-        if (!$clientes) {
-
-            return response()->json([
-                'informacoes' => [
-                    'Nenhum cliente encontrado',
-                ],
-
-            ], 204);
-        }
-
-        return response()->json($clientes);
+        return !$clientes->isEmpty() ? response()->json($clientes) : response()->json([], 204);
     }
 
 
     public function show($id)
     {
         $cliente = $this->_serviceCliente->findById($id);
-
-        if (!$cliente) {
-            return response()->json([
-                'informacoes' => [
-                    'Nenhum cliente encontrado',
-                ],
-            ], 204);
-        }
-
-        return response()->json($cliente);
+        return $cliente ? response()->json($cliente) : response()->json([], 204);
     }
 
 
     public function store(ClienteRequest $request)
     {
-        // var_dump($request->validated()); exit;
-
-        if (!$request->validated()) {
-            return response()->json(["validation_messages" => $request->errors()], 400);
-        }
 
         try {
 
@@ -77,14 +51,9 @@ class ClientesController extends ControllerAbstract
     public function update(ClienteRequest $request, $id)
     {
 
-        if ($request->fails()) {
-            return response()->json(["validation_messages" => $request->errors()->toArray()], 400);
-        }
-
         try {
 
-            $request->pk_id_adm_cliente = $id;
-            return response()->json(["id" => $this->_serviceCliente->save($request)], 200);
+            return response()->json(["id" => $this->_serviceCliente->save($request, $id)], 200);
 
         } catch (Exception $ex) {
 

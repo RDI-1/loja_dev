@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\services;
 
 use App\Core\ServiceAbstract;
 use App\Models\Clientes;
@@ -17,31 +17,31 @@ class ClientesService extends ServiceAbstract
     private $_model;
     private $_serviceUsuario;
 
-    public function __construct(Clientes $cliente, UsuariosService $ServiceUsuario)
+    public function __construct(Clientes $cliente, UsuariosService $serviceUsuario)
     {
 
         $this->_model = $cliente;
-        $this->_serviceUsuario = $ServiceUsuario;
-        
+        $this->_serviceUsuario = $serviceUsuario;
+
     }
 
-    public function save($request)
+    public function save($request, $id = null)
     {
 
-        if ($request->pk_id_adm_cliente) {
-            return $this->update($request);
+        if ($id) {
+            return $this->update($request, $id);
         }
 
         try {
 
             DB::beginTransaction();
 
-            $this->_model->fk_id_adm_pessoa_usuario = $this->_serviceUsuario->save($request);
+            $this->_model->usuarios_id = $this->_serviceUsuario->save($request);
             $this->_model->save();
 
             DB::commit();
 
-            return  $this->_model->pk_id_adm_cliente;
+            return $this->_model->id;
 
         } catch (Exception $ex) {
 
@@ -53,31 +53,23 @@ class ClientesService extends ServiceAbstract
 
     }
 
-    private function update($request)
+    private function update($request, $id)
     {
 
         try {
 
-            $this->findById($request->pk_id_adm_cliente);
-
-            dd($this->_model);
-
-            if (empty($this->_model->pk_id_adm_cliente)) {
-               
-                throw new Exception("Nenhum cliente encontrado para a atualização");
-
-            }
+            $this->_model = $this->findById($id);
 
             DB::beginTransaction();
 
             $this->_model->fill($request->all())->save();
-            $this->_serviceUsuario->save($request);
-             
+            $this->_serviceUsuario->save($request, $this->_model->usuario_id);
+
             DB::commit();
 
             return $this->_model;
 
-        } catch (Exception $e) {
+        } catch (Exception $ex) {
 
             DB::rollBack();
             throw $ex;
