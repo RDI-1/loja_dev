@@ -13,8 +13,8 @@ class T01CriacaoTabelaUsuarios extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('adm_pessoas_usuarios') == false) {
-            Schema::create('adm_pessoas_usuarios', function (Blueprint $table) {
+        if (!Schema::hasTable('usuarios')) {
+            Schema::create('usuarios', function (Blueprint $table) {
                 $table->increments('pk_id_adm_pessoa_usuario');
                 $table->string('nome');
                 $table->string('cpf')->unique();
@@ -32,9 +32,9 @@ class T01CriacaoTabelaUsuarios extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('adm_pessoas_usuarios')) {
+        if (Schema::hasTable('usuarios')) {
 
-            Schema::drop('adm_pessoas_usuarios');
+            Schema::drop('usuarios');
 
         }
     }

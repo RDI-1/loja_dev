@@ -13,8 +13,8 @@ class T01CriacaoTabelaClientes extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('adm_clientes') == false) {
-            Schema::create('adm_clientes', function (Blueprint $table) {
+        if (!Schema::hasTable('clientes')) {
+            Schema::create('clientes', function (Blueprint $table) {
 
                 $table->increments('pk_id_adm_cliente');
 
@@ -22,7 +22,7 @@ class T01CriacaoTabelaClientes extends Migration
 
                 $table->foreign('fk_id_adm_pessoa_usuario')
                     ->references('pk_id_adm_pessoa_usuario')
-                    ->on('adm_pessoas_usuarios');
+                    ->on('usuarios');
 
                 $table->timestamps();
             });
@@ -36,9 +36,9 @@ class T01CriacaoTabelaClientes extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('adm_clientes')) {
+        if (Schema::hasTable('clientes')) {
 
-            Schema::drop('adm_clientes');
+            Schema::drop('clientes');
 
         }
     }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Core;
-class AdapterAbstract
+abstract class AdapterAbstract
 {
 
 }

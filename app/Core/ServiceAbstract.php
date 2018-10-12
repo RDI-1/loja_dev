@@ -2,7 +2,8 @@
 
 namespace App\Core;
 
-class ServiceAbstract
+abstract class ServiceAbstract
 {
+
 
 }

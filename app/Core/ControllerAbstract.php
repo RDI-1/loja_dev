@@ -3,8 +3,10 @@
 namespace App\Core;
 use App\Http\Controllers\Controller;
 
-class ControllerAbstract extends Controller
+abstract class ControllerAbstract extends Controller
 {
+
+    
 
 
 }
