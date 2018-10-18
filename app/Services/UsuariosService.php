@@ -20,7 +20,6 @@ class UsuariosService extends ServiceAbstract
 
     public function save($request, $id = null)
     {
-
         if ($id) {
             return $this->update($request);
         }

@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource('teste', 'api_v1\TesteController');
+
+Route::resource('clientes', 'api_v1\Clientes\ClientesController')->parameters([
+    'clientes' => 'id'
+]);

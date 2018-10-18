@@ -16,6 +16,6 @@ class Clientes extends ModelAbstract
     {
         return $this->hasOne('App\Models\Usuarios', 'id', 'usuarios_id');
     }
-
+    
 
 }

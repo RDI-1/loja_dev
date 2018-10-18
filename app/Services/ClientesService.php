@@ -27,7 +27,6 @@ class ClientesService extends ServiceAbstract
 
     public function save($request, $id = null)
     {
-
         if ($id) {
             return $this->update($request, $id);
         }
@@ -57,17 +56,15 @@ class ClientesService extends ServiceAbstract
     {
 
         try {
-
             $this->_model = $this->findById($id);
-
             DB::beginTransaction();
 
             $this->_model->fill($request->all())->save();
-            $this->_serviceUsuario->save($request, $this->_model->usuario_id);
+            $this->_serviceUsuario->save($request, $this->_model->usuarios_id);
 
             DB::commit();
 
-            return $this->_model;
+            return $this->_model->id;
 
         } catch (Exception $ex) {
 

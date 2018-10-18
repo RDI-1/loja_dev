@@ -35,31 +35,13 @@ class ClientesController extends ControllerAbstract
 
     public function store(ClienteRequest $request)
     {
-
-        try {
-
-            return response()->json(["id" => $this->_serviceCliente->save($request)], 201);
-
-        } catch (Exception $ex) {
-
-            return response()->json($ex->getMessage(), 422);
-        }
-
+        return response()->json(["id" => $this->_serviceCliente->save($request)], 201);
     }
 
 
     public function update(ClienteRequest $request, $id)
     {
-
-        try {
-
-            return response()->json(["id" => $this->_serviceCliente->save($request, $id)], 200);
-
-        } catch (Exception $ex) {
-
-            return response()->json($ex->getMessage(), 422);
-        }
-
+        return response()->json(["id" => $this->_serviceCliente->save($request, $id)], 200);
     }
 
 }

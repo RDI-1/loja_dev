@@ -3,28 +3,19 @@
 namespace App\Http\Requests;
 
 use App\Core\RequestAbstract;
-use Response;
 use Illuminate\Http\Request;
-use App\Services\ClientesService;
+use Response;
 
 class ClienteRequest extends RequestAbstract
 {
 
-    public function authorize()
-    {
-        return true;
-    }
-
     public function rules(Request $request)
     {
-        $clienteService = new ClientesService();
-        $cliente = $clienteService->findById($request->segment(3));
-        dd($cliente);
-        exit;
+        $id = is_null($request->route('id')) ? 0 : $request->route('id');
         return [
             'nome' => 'required',
-            'cpf' => "unique:usuarios,cpf,9,id",
-            'email' => "unique:usuarios,email,9,id",
+            'cpf' => "unique:usuarios,cpf," . $id,
+            'email' => "unique:usuarios,email," . $id,
             'senha' => 'required',
         ];
 
@@ -34,6 +25,7 @@ class ClienteRequest extends RequestAbstract
     {
 
         return [
+            'message' => 'ssasdasda',
             'required' => 'Campo Obrigatório',
             'cpf.unique' => 'Já existe um usuário com este CPF.',
             'email.unique' => 'Já existe um usuário com este Email.',
@@ -41,6 +33,7 @@ class ClienteRequest extends RequestAbstract
         ];
 
     }
+
 
 
 
