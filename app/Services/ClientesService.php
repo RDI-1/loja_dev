@@ -54,7 +54,6 @@ class ClientesService extends ServiceAbstract
 
     private function update($request, $id)
     {
-
         try {
             $this->_model = $this->findById($id);
             DB::beginTransaction();
@@ -83,6 +82,28 @@ class ClientesService extends ServiceAbstract
     public function findById(int $id)
     {
         return $this->_model::with('usuario')->get()->find($id);
+    }
+
+    public function delete($id)
+    {
+        try {
+
+            $this->_model = $this->findById($id);
+
+            DB::beginTransaction();
+
+            $this->_serviceUsuario->delete($this->_model->usuarios_id);
+            $this->_model->delete();
+
+            DB::commit();
+
+        } catch (Exception $ex) {
+
+            DB::rollBack();
+            throw $ex;
+
+        }
+
     }
 
 

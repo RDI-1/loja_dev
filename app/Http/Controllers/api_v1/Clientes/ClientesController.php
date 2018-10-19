@@ -22,14 +22,14 @@ class ClientesController extends ControllerAbstract
     public function index()
     {
         $clientes = $this->_serviceCliente->getAll();
-        return !$clientes->isEmpty() ? response()->json($clientes) : response()->json([], 204);
+        return !$clientes->isEmpty() ? response()->json($clientes) : response()->json(null, 204);
     }
 
 
     public function show($id)
     {
         $cliente = $this->_serviceCliente->findById($id);
-        return $cliente ? response()->json($cliente) : response()->json([], 204);
+        return $cliente ? response()->json($cliente) : response()->json(null, 204);
     }
 
 
@@ -42,6 +42,12 @@ class ClientesController extends ControllerAbstract
     public function update(ClienteRequest $request, $id)
     {
         return response()->json(["id" => $this->_serviceCliente->save($request, $id)], 200);
+    }
+
+    public function destroy($id)
+    {
+        $this->_serviceCliente->delete($id);
+        return response()->json(null, 202);
     }
 
 }

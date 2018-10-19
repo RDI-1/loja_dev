@@ -8,9 +8,7 @@ class Usuarios extends ModelAbstract
 {
 
     protected $table = 'usuarios';
-    protected $primaryKey = 'id';
     protected $fillable = ['id', 'nome', 'cpf', 'email', 'senha'];
-    public $timestamps = true;
 
     public function cliente()
     {

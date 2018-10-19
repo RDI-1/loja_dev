@@ -21,7 +21,7 @@ class UsuariosService extends ServiceAbstract
     public function save($request, $id = null)
     {
         if ($id) {
-            return $this->update($request);
+            return $this->update($request, $id);
         }
 
         $this->_model->fill($request->all())->save();
@@ -29,10 +29,9 @@ class UsuariosService extends ServiceAbstract
         return $this->_model->id;
     }
 
-    private function update($request)
+    private function update($request, $id)
     {
-
-        $this->_model = $this->findById($request->id);
+        $this->_model = $this->findById($id);
         $this->_model->fill($request->all())->save();
 
         return $this->_model->id;
@@ -42,6 +41,11 @@ class UsuariosService extends ServiceAbstract
     public function findById(int $id)
     {
         return $this->_model::find($id);
+    }
+
+    public function delete($id)
+    {
+        $this->findById($id)->delete();
     }
 
 

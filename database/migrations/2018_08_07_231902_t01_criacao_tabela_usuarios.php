@@ -21,6 +21,7 @@ class T01CriacaoTabelaUsuarios extends Migration
                 $table->string('email')->unique();
                 $table->string('senha');
                 $table->timestamps();
+                $table->softDeletes();
             });
         }
     }

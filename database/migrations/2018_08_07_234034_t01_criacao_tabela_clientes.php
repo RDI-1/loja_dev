@@ -19,6 +19,8 @@ class T01CriacaoTabelaClientes extends Migration
                 $table->increments('id');
                 $table->integer('usuarios_id')->foreign('usuarios')->references('id')->on('usuarios');
                 $table->timestamps();
+                $table->softDeletes();
+
             });
         }
     }
