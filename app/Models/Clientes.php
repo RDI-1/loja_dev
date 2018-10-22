@@ -8,12 +8,12 @@ class Clientes extends ModelAbstract
 {
 
     protected $table = 'clientes';
-    protected $fillable = ['id, usuarios_id'];
+    protected $fillable = ['id, id_usuario'];
 
     public function usuario()
     {
-        return $this->hasOne('App\Models\Usuarios', 'id', 'usuarios_id');
+        return $this->hasOne('App\Models\Usuarios', 'id', 'id_usuario');
     }
-    
+
 
 }
