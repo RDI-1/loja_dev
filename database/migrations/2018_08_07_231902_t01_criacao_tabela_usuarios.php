@@ -16,10 +16,13 @@ class T01CriacaoTabelaUsuarios extends Migration
         if (!Schema::hasTable('usuarios')) {
             Schema::create('usuarios', function (Blueprint $table) {
                 $table->increments('id');
-                $table->string('nome');
-                $table->string('cpf')->unique();
-                $table->string('email')->unique();
-                $table->string('senha');
+                $table->string('nome', 254);
+                $table->string('cpf', 100)->nullable()->unique();
+                $table->string('cnpj', 100)->nullable()->unique();
+                $table->string('email', 200)->unique();
+                $table->string('celular', 80)->nullable()->unique();
+                $table->string('telefone', 80)->nullable()->unique();
+                $table->string('senha', 200);
                 $table->timestamps();
                 $table->softDeletes();
             });

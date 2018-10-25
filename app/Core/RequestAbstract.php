@@ -25,7 +25,9 @@ abstract class RequestAbstract extends FormRequest
 
         return [
             'required' => 'Campo Obrigatório',
-            'unique' => 'Já existe um usuário com este :attribute.',
+            'unique' => 'Já existe um usuário com este :attribute',
+            'email' => 'Email inválido',
+            'max' => 'Valor de caracteres excedidos',
         ];
 
     }
