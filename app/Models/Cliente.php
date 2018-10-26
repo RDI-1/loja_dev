@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Core\ModelAbstract;
 
-class Clientes extends ModelAbstract
+class Cliente extends ModelAbstract
 {
 
     protected $table = 'clientes';
@@ -12,7 +12,7 @@ class Clientes extends ModelAbstract
 
     public function usuario()
     {
-        return $this->hasOne('App\Models\Usuarios', 'id', 'id_usuario');
+        return $this->hasOne('App\Models\Usuario', 'id', 'id_usuario');
     }
 
 

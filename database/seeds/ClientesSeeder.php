@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Clientes;
+use App\Models\Cliente;
 
 class ClientesSeeder extends Seeder
 {
@@ -11,7 +11,7 @@ class ClientesSeeder extends Seeder
         DB::table('usuarios')->delete();
         DB::table('clientes')->delete();
 
-        $usuarios = factory(Clientes::class, 1000)->create();
+        $usuarios = factory(Cliente::class, 1000)->create();
 
     }
 }

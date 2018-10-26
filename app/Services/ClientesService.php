@@ -3,13 +3,10 @@
 namespace App\services;
 
 use App\Core\ServiceAbstract;
-use App\Models\Clientes;
+use App\Models\Cliente;
 use App\Services\UsuariosService;
 use Exception;
 use DB;
-use App\Http\Requests\ClienteRequest;
-use Illuminate\Http\Request;
-
 
 class ClientesService extends ServiceAbstract
 {
@@ -17,11 +14,12 @@ class ClientesService extends ServiceAbstract
     private $_model;
     private $_serviceUsuario;
 
-    public function __construct(Clientes $cliente, UsuariosService $serviceUsuario)
+
+    public function __construct()
     {
 
-        $this->_model = $cliente;
-        $this->_serviceUsuario = $serviceUsuario;
+        $this->_model = new Cliente();
+        $this->_serviceUsuario = new UsuariosService();
 
     }
 

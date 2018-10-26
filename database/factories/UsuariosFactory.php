@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Usuarios::class, function (Faker $faker) {
+$factory->define(App\Models\Usuario::class, function (Faker $faker) {
     return [
         'nome' => $faker->name,
         'cpf' => $faker->unique()->randomNumber,

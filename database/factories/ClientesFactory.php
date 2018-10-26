@@ -1,14 +1,14 @@
 <?php
 
 use Faker\Generator as Faker;
-use App\Models\Usuarios;
+use App\Models\Usuario;
 
-$factory->define(App\Models\Clientes::class, function (Faker $faker) {
+$factory->define(App\Models\Cliente::class, function (Faker $faker) {
 
 
     return [
         'id_usuario' => function () {
-            return factory(Usuarios::class)->create()->id;
+            return factory(Usuario::class)->create()->id;
         }
     ];
 

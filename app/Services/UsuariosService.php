@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Core\ServiceAbstract;
-use App\Models\Usuarios;
+use App\Models\Usuario;
 use Exception;
 use DB;
 use Illuminate\Http\Request;
@@ -13,9 +13,9 @@ class UsuariosService extends ServiceAbstract
 
     private $_model;
 
-    public function __construct(Usuarios $usuario)
+    public function __construct()
     {
-        $this->_model = $usuario;
+        $this->_model = new Usuario();
     }
 
     public function save($request, $id = null)

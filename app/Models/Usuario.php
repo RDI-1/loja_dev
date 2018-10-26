@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Core\ModelAbstract;
 
-class Usuarios extends ModelAbstract
+class Usuario extends ModelAbstract
 {
 
     protected $table = 'usuarios';
@@ -12,7 +12,7 @@ class Usuarios extends ModelAbstract
 
     public function cliente()
     {
-        return $this->belongsTo('App\Models\Clientes', 'id', 'id_usuario');
+        return $this->belongsTo('App\Models\Cliente', 'id', 'id_usuario');
     }
 
 
