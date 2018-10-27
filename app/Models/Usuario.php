@@ -2,17 +2,38 @@
 
 namespace App\Models;
 
-use App\Core\ModelAbstract;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Usuario extends ModelAbstract
+class Usuario extends Authenticatable
 {
 
+    use HasApiTokens, Notifiable, SoftDeletes;
+
     protected $table = 'usuarios';
-    protected $fillable = ['id', 'nome', 'cpf', 'cnpj', 'email', 'celular', 'telefone', 'senha'];
+    protected $primaryKey = 'id';
+    public $timestamps = true;
+    protected $dates = ['deleted_at'];
+    protected $fillable = [
+        'id', 'nome', 'cpf', 'cnpj', 'email', 'celular', 'telefone', 'password'
+    ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
 
     public function cliente()
     {
         return $this->belongsTo('App\Models\Cliente', 'id', 'id_usuario');
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 
 

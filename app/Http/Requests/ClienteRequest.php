@@ -21,7 +21,7 @@ class ClienteRequest extends RequestAbstract
             'email' => "max:200|email|required|unique:usuarios,email,{$id}",
             'celular' => "max:80|unique:usuarios,celular,{$id}",
             'telefone' => "max:80|unique:usuarios,telefone,{$id}",
-            'senha' => 'max:200|required',
+            'password' => 'max:200|required',
         ];
 
     }

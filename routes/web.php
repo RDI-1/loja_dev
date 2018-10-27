@@ -9,3 +9,7 @@ Route::group(['prefix' => 'api_v1'], function () {
 
 
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

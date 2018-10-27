@@ -19,10 +19,11 @@ class T01CriacaoTabelaUsuarios extends Migration
                 $table->string('nome', 254);
                 $table->string('cpf', 100)->nullable()->unique();
                 $table->string('cnpj', 100)->nullable()->unique();
-                $table->string('email', 200)->unique();
                 $table->string('celular', 80)->nullable()->unique();
                 $table->string('telefone', 80)->nullable()->unique();
-                $table->string('senha', 200);
+                $table->string('email', 200)->unique();
+                $table->string('password', 200);
+                $table->rememberToken();
                 $table->timestamps();
                 $table->softDeletes();
             });
@@ -36,10 +37,6 @@ class T01CriacaoTabelaUsuarios extends Migration
      */
     public function down()
     {
-        if (Schema::hasTable('usuarios')) {
-
-            Schema::drop('usuarios');
-
-        }
+        Schema::dropIfExists('usuarios');
     }
 }
