@@ -33,7 +33,7 @@ class ClientesService extends ServiceAbstract
 
             DB::beginTransaction();
 
-            $this->_model->id_usuario = $this->_serviceUsuario->save($request);
+            $this->_model->usuario_id = $this->_serviceUsuario->save($request);
             $this->_model->save();
 
             DB::commit();
@@ -57,7 +57,7 @@ class ClientesService extends ServiceAbstract
             DB::beginTransaction();
 
             $this->_model->fill($request->all())->save();
-            $this->_serviceUsuario->save($request, $this->_model->id_usuario);
+            $this->_serviceUsuario->save($request, $this->_model->usuario_id);
 
             DB::commit();
 
@@ -90,7 +90,7 @@ class ClientesService extends ServiceAbstract
 
             DB::beginTransaction();
 
-            $this->_serviceUsuario->delete($this->_model->id_usuario);
+            $this->_serviceUsuario->delete($this->_model->usuario_id);
             $this->_model->delete();
 
             DB::commit();

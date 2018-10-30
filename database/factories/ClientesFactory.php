@@ -7,7 +7,7 @@ $factory->define(App\Models\Cliente::class, function (Faker $faker) {
 
 
     return [
-        'id_usuario' => function () {
+        'usuario_id' => function () {
             return factory(Usuario::class)->create()->id;
         }
     ];

@@ -17,7 +17,7 @@ class T01CriacaoTabelaClientes extends Migration
             Schema::create('clientes', function (Blueprint $table) {
 
                 $table->increments('id');
-                $table->integer('id_usuario')->foreign('usuarios')->references('id')->on('usuarios');
+                $table->integer('usuario_id')->foreign('usuarios')->references('id')->on('usuarios');
                 $table->timestamps();
                 $table->softDeletes();
 

@@ -28,7 +28,7 @@ class Usuario extends Authenticatable
 
     public function cliente()
     {
-        return $this->belongsTo('App\Models\Cliente', 'id', 'id_usuario');
+        return $this->hasOne('App\Models\Cliente');
     }
 
     public function setPasswordAttribute($value)
